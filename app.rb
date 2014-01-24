@@ -4,13 +4,14 @@ require 'open-uri'
 require 'nokogiri'
 require 'json'
 
+KINDLE_URL = "https://kindle.amazon.com/profile/Mehul-Kar/4275127/reading"
+
 get '/' do
   cross_origin
-  page = open("https://kindle.amazon.com/profile/Mehul-Kar/4275127/reading")
-  nokogiri = Nokogiri::HTML(page)
-  bookElements = nokogiri.css('#profilePage ul .profileBookEntry')
+  nokogiri      = Nokogiri::HTML(open(KINDLE_URL))
+  book_elements = nokogiri.css('#profilePage ul .profileBookEntry')
 
-  books = bookElements.map do |el|
+  books = book_elements.map do |el|
     author  = el.css('.author').text
     title   = el.css('.title').text
     { author: author, title: title }
